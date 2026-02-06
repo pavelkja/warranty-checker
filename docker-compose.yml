@@ -8,3 +8,8 @@ services:
       - ./data:/app/data
       - ./new_imports:/app/new_imports
     restart: unless-stopped
+    environment:
+  - ADMIN_USER=${pavelkja}
+  - ADMIN_PASS=${Meopta2026}
+
+
