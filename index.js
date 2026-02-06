@@ -57,15 +57,6 @@ db.run(`
   )
 `);
 
-// ==========================
-// API
-// ==========================
-app.get("/api/check", (req, res) => {
-  const serial = (req.query.serial || "").trim().toUpperCase();
-
-  if (!serial) {
-    return res.status(400).json({ error: "Chybí sériové číslo" });
-  }
 
 app.get("/admin/test-import", async (req, res) => {
   try {
@@ -77,6 +68,15 @@ app.get("/admin/test-import", async (req, res) => {
   }
 });
 
+// ==========================
+// API
+// ==========================
+app.get("/api/check", (req, res) => {
+  const serial = (req.query.serial || "").trim().toUpperCase();
+
+  if (!serial) {
+    return res.status(400).json({ error: "Chybí sériové číslo" });
+  }
 
   db.all(
     `
