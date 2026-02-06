@@ -1,6 +1,8 @@
 import fs from "fs";
 import sqlite3 from "sqlite3";
 
+export function importCsv(filePath) {
+
 const CSV_FILE = "./warranty_import.csv"; // název tvého CSV
 const DB_FILE = "./warranty.db";
 
@@ -37,7 +39,7 @@ function cleanHeader(header) {
   return header.replace(/^\uFEFF/, "").trim();
 }
 
-fs.readFile(CSV_FILE, "utf-8", (err, content) => {
+fs.readFile(filePath, "utf-8", (err, content) => {
   if (err) {
     console.error("Cannot read CSV:", err.message);
     process.exit(1);
@@ -122,3 +124,5 @@ fs.readFile(CSV_FILE, "utf-8", (err, content) => {
     });
   });
 });
+  }
+
