@@ -249,7 +249,7 @@ function runPendingImports() {
 }
 
 // statické soubory
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Spustit importy při startu serveru
 runPendingImports();
