@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { importCsv } from "./import_csv.js";
+import multer from "multer";
 
 const app = express();
 
@@ -33,6 +34,12 @@ function adminAuth(req, res, next) {
   return res.status(403).send("Forbidden");
 }
 
+const upload = multer({
+  dest: "/tmp/uploads",
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10 MB
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 
@@ -98,6 +105,39 @@ app.get("/admin/import", adminAuth, (req, res) => {
     </form>
   `);
 });
+
+app.post(
+  "/admin/import",
+  adminAuth,
+  upload.single("file"),
+  async (req, res) => {
+    if (!req.file) {
+      return res.status(400).send("Nebyl nahrán žádný soubor");
+    }
+
+    const filePath = req.file.path;
+
+    try {
+      await importCsv(filePath);
+      fs.unlinkSync(filePath);
+
+      res.send(`
+        <h2>Import hotový</h2>
+        <p>Soubor byl úspěšně naimportován.</p>
+        <a href="/admin/import">Zpět</a>
+      `);
+    } catch (err) {
+      console.error(err);
+
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+
+      res.status(500).send("Chyba při importu CSV");
+    }
+  }
+);
+
 
 // ==========================
 // API
