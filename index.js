@@ -201,6 +201,13 @@ runPendingImports();
 // ==========================
 // START
 // ==========================
+console.log(
+  app._router.stack
+    .filter(r => r.route)
+    .map(r => Object.keys(r.route.methods)[0].toUpperCase() + " " + r.route.path)
+);
+
+
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server běží na portu ${PORT}`);
 });
