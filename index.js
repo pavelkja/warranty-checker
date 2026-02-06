@@ -3,6 +3,8 @@ import sqlite3 from "sqlite3";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { importCsv } from "./import_csv.js";
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -64,6 +66,17 @@ app.get("/api/check", (req, res) => {
   if (!serial) {
     return res.status(400).json({ error: "Chybí sériové číslo" });
   }
+
+app.get("/admin/test-import", async (req, res) => {
+  try {
+    await importCsv("./warranty_import.csv");
+    res.send("Import spuštěn (test)");
+  } catch (e) {
+    console.error(e);
+    res.status(500).send("Chyba při importu");
+  }
+});
+
 
   db.all(
     `
