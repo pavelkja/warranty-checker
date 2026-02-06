@@ -7,11 +7,12 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { importCsv } from "./import_csv.js";
 
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ES modules __dirname
+// ==========================
+// ES MODULES __dirname
+// ==========================
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -59,7 +60,9 @@ db.run(`
   )
 `);
 
-
+// ==========================
+// ADMIN – TEST IMPORT (DOČASNÉ)
+// ==========================
 app.get("/admin/test-import", async (req, res) => {
   try {
     await importCsv("./warranty_import.csv");
@@ -107,7 +110,7 @@ app.get("/api/check", (req, res) => {
 });
 
 // ==========================
-// CSV IMPORT
+// CSV IMPORT – INTERNÍ LOGIKA
 // ==========================
 function detectDelimiter(line) {
   return line.includes(";") ? ";" : ",";
@@ -176,7 +179,7 @@ function importCsvFile(csvPath, filename) {
 }
 
 // ==========================
-// IMPORT PŘI STARTU
+// IMPORT PŘI STARTU (LEGACY)
 // ==========================
 function runPendingImports() {
   const importsDir = path.join(__dirname, "new_imports");
@@ -201,7 +204,7 @@ function runPendingImports() {
 runPendingImports();
 
 // ==========================
-// START
+// DEBUG – VYPSÁNÍ ROUT
 // ==========================
 console.log(
   app._router.stack
@@ -209,8 +212,9 @@ console.log(
     .map(r => Object.keys(r.route.methods)[0].toUpperCase() + " " + r.route.path)
 );
 
-
+// ==========================
+// START SERVERU
+// ==========================
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server běží na portu ${PORT}`);
 });
-
