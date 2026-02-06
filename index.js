@@ -8,6 +8,32 @@ import { fileURLToPath } from "url";
 import { importCsv } from "./import_csv.js";
 
 const app = express();
+
+function adminAuth(req, res, next) {
+  const auth = req.headers.authorization;
+
+  if (!auth || !auth.startsWith("Basic ")) {
+    res.set("WWW-Authenticate", "Basic");
+    return res.status(401).send("Auth required");
+  }
+
+  const decoded = Buffer
+    .from(auth.split(" ")[1], "base64")
+    .toString();
+
+  const [user, pass] = decoded.split(":");
+
+  if (
+    user === process.env.ADMIN_USER &&
+    pass === process.env.ADMIN_PASS
+  ) {
+    return next();
+  }
+
+  return res.status(403).send("Forbidden");
+}
+
+
 const PORT = process.env.PORT || 5000;
 
 // ==========================
