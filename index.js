@@ -86,6 +86,19 @@ db.run(`
   )
 `);
 
+
+app.get("/admin/import", adminAuth, (req, res) => {
+  res.send(`
+    <h1>Import registrací (CSV)</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".csv" required />
+      <br><br>
+      <button type="submit">Nahrát a importovat</button>
+    </form>
+  `);
+});
+
 // ==========================
 // API
 // ==========================
