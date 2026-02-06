@@ -61,19 +61,6 @@ db.run(`
 `);
 
 // ==========================
-// ADMIN – TEST IMPORT (DOČASNÉ)
-// ==========================
-app.get("/admin/test-import", async (req, res) => {
-  try {
-    await importCsv("./warranty_import.csv");
-    res.send("Import spuštěn (test)");
-  } catch (e) {
-    console.error(e);
-    res.status(500).send("Chyba při importu");
-  }
-});
-
-// ==========================
 // API
 // ==========================
 app.get("/api/check", (req, res) => {
