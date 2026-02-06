@@ -3,8 +3,8 @@ services:
     build: .
     container_name: warranty-app
     ports:
-      - "3000:3000"
+      - "5000:5000"
     volumes:
       - ./data:/app/data
-      - ./import:/app/import
+      - ./new_imports:/app/new_imports
     restart: unless-stopped
