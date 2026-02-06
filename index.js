@@ -203,14 +203,6 @@ function runPendingImports() {
 
 runPendingImports();
 
-// ==========================
-// DEBUG – VYPSÁNÍ ROUT
-// ==========================
-console.log(
-  app._router.stack
-    .filter(r => r.route)
-    .map(r => Object.keys(r.route.methods)[0].toUpperCase() + " " + r.route.path)
-);
 
 // ==========================
 // START SERVERU
