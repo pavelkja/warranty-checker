@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // SQLite databáze
-const db = new sqlite3.Database("./warranty.db", (err) => {
+const db = new sqlite3.Database("./data/warranty.db", (err) => {
   if (err) {
     console.error("Chyba při otevření DB:", err.message);
   } else {
