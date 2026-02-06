@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // ==========================
-// STATICKÉ SOUBORY – MUSÍ BÝT NAHOŘE
+// STATICKÉ SOUBORY + FRONTEND
 // ==========================
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -56,12 +56,8 @@ db.run(`
 `);
 
 // ==========================
-// ROUTES
+// API
 // ==========================
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
-
 app.get("/api/check", (req, res) => {
   const serial = (req.query.serial || "").trim().toUpperCase();
 
@@ -107,11 +103,8 @@ function cleanHeader(h) {
 }
 
 function importCsvFile(csvPath, filename) {
-  console.log(`Starting import: ${filename}`);
-
   const content = fs.readFileSync(csvPath, "utf-8");
   const lines = content.split("\n").filter(l => l.trim() !== "");
-
   if (lines.length < 2) return;
 
   const delimiter = detectDelimiter(lines[0]);
@@ -182,9 +175,7 @@ function runPendingImports() {
 
   db.all(`SELECT filename FROM import_log`, (err, rows) => {
     if (err) return;
-
     const importedFiles = new Set(rows.map(r => r.filename));
-
     for (const file of files) {
       if (importedFiles.has(file)) continue;
       importCsvFile(path.join(importsDir, file), file);
@@ -195,8 +186,9 @@ function runPendingImports() {
 runPendingImports();
 
 // ==========================
-// START SERVERU
+// START
 // ==========================
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server běží na portu ${PORT}`);
 });
+
