@@ -226,10 +226,22 @@
   </div>
 
   <script>
-    const APP_META = {
-      version: "1.0.0",
-      lastUpdated: "2026-02-05"
-    };
+  
+  let APP_META = {
+  version: "?",
+  lastUpdated: "?"
+};
+
+async function loadAppMeta() {
+  try {
+    const res = await fetch("/api/meta");
+    APP_META = await res.json();
+    renderStaticTexts();
+  } catch {
+    // fallback – nic se nestane, jen se nezobrazí meta
+  }
+}
+
 
     let currentLang = "cz";
     let lastResultData = null;
@@ -384,6 +396,8 @@
     document.getElementById("lang-en").addEventListener("click", () => setLanguage("en"));
 
     setLanguage("cz");
+    loadAppMeta();
+
   </script>
 </body>
 </html>
