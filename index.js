@@ -244,6 +244,20 @@ function importCsvFile(csvPath, filename) {
   });
 }
 
+// verze aplikace - výpis na index.html
+
+import pkg from "./package.json" assert { type: "json" };
+
+const APP_STARTED_AT = new Date().toISOString().slice(0, 10);
+
+app.get("/api/meta", (req, res) => {
+  res.json({
+    version: pkg.version,
+    lastUpdated: APP_STARTED_AT
+  });
+});
+
+
 // ==========================
 // IMPORT PŘI STARTU (LEGACY)
 // ==========================
